@@ -5,6 +5,7 @@ import com.example.authservice.repository.AuthUserRepository;
 import com.example.authservice.service.AuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class AuthUserServiceImpl implements AuthUserService {
     }
 
     @Override
+    @Transactional
     public AuthUser save(String username, String email, String password) {
         AuthUser user = AuthUser.builder()
                 .username(username)
