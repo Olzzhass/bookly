@@ -14,23 +14,10 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-.idea/**
-.idea/
+.idea
 *.iws
 *.iml
 *.ipr
-**/.mvn/
-**/.mvn/**
-*.cmd
-**/*.cmd
-**/*mvnw
-mvnw
-**/*.env
-.env
 
 ### NetBeans ###
 /nbproject/private/
