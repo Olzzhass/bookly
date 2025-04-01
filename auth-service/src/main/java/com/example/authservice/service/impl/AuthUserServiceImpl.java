@@ -33,7 +33,7 @@ public class AuthUserServiceImpl implements AuthUserService {
     }
 
     @Override
-    public boolean isUserExists(String email) {
-        return authUserRepository.findByEmail(email).isPresent();
+    public boolean isUserExists(String username) {
+        return authUserRepository.findByUsername(username).isPresent();
     }
 }

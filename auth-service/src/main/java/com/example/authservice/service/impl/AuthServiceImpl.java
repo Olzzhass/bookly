@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
 
     public AuthResponse registration(RegistrationRequest request) {
 
-        if (authUserService.isUserExists(request.getEmail())) {
+        if (authUserService.isUserExists(request.getUsername())) {
             return AuthResponse.builder()
                     .accessToken("Error: Email is already in use!") // TODO change to exception handling
                     .build();
