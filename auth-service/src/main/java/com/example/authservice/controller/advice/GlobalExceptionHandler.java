@@ -7,7 +7,6 @@ import com.example.authservice.model.response.AppExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,12 +23,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IncorrectCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     ResponseEntity<AppExceptionResponse> handleIncorrectCredentialsException(IncorrectCredentialsException exception) {
-        return buildExceptionResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
-    }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    ResponseEntity<AppExceptionResponse> handleBadCredentialsException(BadCredentialsException exception) {
         return buildExceptionResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
 
