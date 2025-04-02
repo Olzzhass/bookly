@@ -39,11 +39,13 @@ public class GlobalExceptionHandler {
         return buildExceptionResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    ResponseEntity<AppExceptionResponse> handleGeneralException(Exception exception) {
-        return buildExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
-    }
+    // Confusing of error types when developing
+
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    ResponseEntity<AppExceptionResponse> handleGeneralException(Exception exception) {
+//        return buildExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+//    }
 
     private ResponseEntity<AppExceptionResponse> buildExceptionResponse(HttpStatus status, String message) {
         return ResponseEntity.status(status).body(AppExceptionResponse.builder()

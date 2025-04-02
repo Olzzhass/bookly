@@ -13,7 +13,7 @@ public class JwtToAuthUserConverter {
 
     public AuthUser convert(DecodedJWT jwt) {
         return AuthUser.builder()
-                .id(Long.valueOf(jwt.getSubject()))
+                .id(Long.valueOf(jwt.getClaim("userId").asString()))
                 .username(jwt.getClaim("username").asString())
                 .role(extractAuthoritiesFromClaim(jwt))
                 .build();

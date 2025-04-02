@@ -6,10 +6,8 @@ import com.example.authservice.model.response.AuthResponse;
 import com.example.authservice.service.impl.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +24,11 @@ public class AuthController {
     @PostMapping("/registration")
     public ResponseEntity<AuthResponse> registration(@RequestBody RegistrationRequest request) {
         return ResponseEntity.ok(authServiceImpl.registration(request));
+    }
+
+    @GetMapping("/test")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Successful test of method security");
     }
 }
