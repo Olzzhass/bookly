@@ -1,5 +1,6 @@
 package com.example.authservice.service.impl;
 
+import com.example.authservice.exception.UserAlreadyExistException;
 import com.example.authservice.model.AuthUser;
 import com.example.authservice.model.request.LoginRequest;
 import com.example.authservice.model.request.RegistrationRequest;
@@ -30,7 +31,6 @@ public class AuthServiceImpl implements AuthService {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
         var principal = (AuthUser) authentication.getPrincipal();
 
@@ -49,9 +49,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse registration(RegistrationRequest request) {
 
         if (authUserService.isUserExists(request.getUsername())) {
-            return AuthResponse.builder()
-                    .accessToken("Error: Email is already in use!") // TODO change to exception handling
-                    .build();
+            throw new UserAlreadyExistException("Пользователь с таким email или username уже существует");
         }
 
         String encodedPassword = passwordService.encodePassword(request.getPassword());
