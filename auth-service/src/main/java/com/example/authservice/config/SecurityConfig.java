@@ -39,6 +39,8 @@ public class SecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/auth/registration").permitAll()
+                        .requestMatchers("/auth/refresh").authenticated()
+                        .requestMatchers("/auth/logout").authenticated()
                         .anyRequest().authenticated()
                 );
 

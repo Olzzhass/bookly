@@ -1,8 +1,6 @@
 package com.example.authservice.controller.advice;
 
-import com.example.authservice.exception.IncorrectCredentialsException;
-import com.example.authservice.exception.InvalidRequestException;
-import com.example.authservice.exception.UserAlreadyExistException;
+import com.example.authservice.exception.*;
 import com.example.authservice.model.response.AppExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +29,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<AppExceptionResponse> handleInvalidRequestException(InvalidRequestException exception) {
         return buildExceptionResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
+
+    @ExceptionHandler(RefreshTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<AppExceptionResponse> handleRefreshTokenException(RefreshTokenException exception) {
+        return buildExceptionResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
+    }
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<AppExceptionResponse> handleUserNotFoundException(UserNotFoundException exception) {
+        return buildExceptionResponse(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+
+
 
     // Confusing of error types when developing
 
