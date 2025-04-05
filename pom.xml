@@ -18,6 +18,8 @@
     <modules>
         <module>gateway</module>
         <module>auth-service</module>
+        <module>user-service</module>
+        <module>shared</module>
     </modules>
 
     <properties>
