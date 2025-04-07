@@ -5,6 +5,6 @@ import com.example.userservice.model.response.UserProfileResponse;
 
 public interface UserProfileService {
     UserProfileResponse createProfile(UserProfileRequest request);
-    UserProfileResponse getProfileByUsername(String username);
-    UserProfileResponse updateProfile(String username, UserProfileRequest request);
+    UserProfileResponse getProfileByCurrentUser();
+    UserProfileResponse updateProfileForCurrentUser(UserProfileRequest request);
 }

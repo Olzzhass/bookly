@@ -19,13 +19,13 @@ public class UserProfileController {
         return ResponseEntity.ok(userProfileService.createProfile(request));
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<UserProfileResponse> getProfile(@PathVariable String username) {
-        return ResponseEntity.ok(userProfileService.getProfileByUsername(username));
+    @GetMapping("/me")
+    public ResponseEntity<UserProfileResponse> getProfile() {
+        return ResponseEntity.ok(userProfileService.getProfileByCurrentUser());
     }
 
-    @PutMapping("/{username}")
-    public ResponseEntity<UserProfileResponse> updateProfile(@PathVariable String username, @RequestBody UserProfileRequest request) {
-        return ResponseEntity.ok(userProfileService.updateProfile(username, request));
+    @PutMapping("/me")
+    public ResponseEntity<UserProfileResponse> updateProfile(@RequestBody UserProfileRequest request) {
+        return ResponseEntity.ok(userProfileService.updateProfileForCurrentUser(request));
     }
 }
