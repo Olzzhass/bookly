@@ -40,7 +40,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Override
     @Transactional
     public UserProfileResponse updateProfileForCurrentUser(UserProfileRequest request) {
-        String currentUsername = getCurrentUsername();  // Получаем текущего пользователя
+        String currentUsername = getCurrentUsername();
         UserProfile profile = findProfileOrThrow(currentUsername);
         userProfileMapper.updateUserProfileFromDto(request, profile);
         updateTimestamp(profile);

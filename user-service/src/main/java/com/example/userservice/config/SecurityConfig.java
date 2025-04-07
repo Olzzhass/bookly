@@ -31,8 +31,7 @@ public class SecurityConfig {
                         -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> registry
-                        .anyRequest().permitAll()
-//                        .anyRequest().authenticated()
+                        .anyRequest().authenticated()
                 );
 
         return http.build();
