@@ -1,7 +1,7 @@
 package com.example.authservice.controller.advice;
 
+import com.example.shared.dto.AppExceptionResponse;
 import com.example.authservice.exception.*;
-import com.example.authservice.model.response.AppExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
