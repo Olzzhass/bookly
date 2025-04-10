@@ -18,6 +18,9 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -26,6 +29,6 @@ public class Author {
 
     private String bio;
 
-    @ManyToMany(mappedBy = "author")
+    @ManyToMany(mappedBy = "authors")
     private List<Book> books;
 }
