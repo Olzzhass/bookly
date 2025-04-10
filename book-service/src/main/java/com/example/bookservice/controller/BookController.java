@@ -31,7 +31,7 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookDto>> getAll() {
+    public ResponseEntity<List<BookDto>> getAll(){
         return ResponseEntity.ok(bookService.findAll());
     }
 }
