@@ -35,6 +35,12 @@ public class AuthUserServiceImpl implements AuthUserService {
     }
 
     @Override
+    @Transactional
+    public AuthUser save(AuthUser user) {
+        return authUserRepository.save(user);
+    }
+
+    @Override
     public boolean isUserExists(String username) {
         return authUserRepository.findByUsername(username).isPresent();
     }

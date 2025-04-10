@@ -1,8 +1,10 @@
 package com.example.authservice.service.impl;
 
 import com.example.authservice.exception.UserAlreadyExistException;
+import com.example.authservice.exception.UserNotFoundException;
 import com.example.authservice.model.AuthUser;
 import com.example.authservice.model.RefreshToken;
+import com.example.authservice.model.dto.UserRoleUpdateDto;
 import com.example.authservice.model.request.LoginRequest;
 import com.example.authservice.model.request.RegistrationRequest;
 import com.example.authservice.model.response.AuthResponse;
@@ -17,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,5 +87,19 @@ public class AuthServiceImpl implements AuthService {
                 .maxAge(Duration.ofDays(1))
                 .sameSite("Strict")
                 .build();
+    }
+
+    @Override
+    public void changeRole(UserRoleUpdateDto userRoleUpdateDto) {
+        AuthUser user = findUserByUsername(userRoleUpdateDto.getUsername());
+
+        user.setRole(userRoleUpdateDto.getRole());
+
+        authUserService.save(user);
+    }
+
+    private AuthUser findUserByUsername(String username) {
+        return authUserService.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 }

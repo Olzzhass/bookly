@@ -1,5 +1,6 @@
 package com.example.authservice.controller;
 
+import com.example.authservice.model.dto.UserRoleUpdateDto;
 import com.example.authservice.model.request.LoginRequest;
 import com.example.authservice.model.request.RegistrationRequest;
 import com.example.authservice.model.response.AuthResponse;
@@ -68,6 +69,14 @@ public class AuthController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> test() {
         return ResponseEntity.ok("Successful test of method security");
+    }
+
+    @PutMapping("/change-role")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> changeRole(@RequestBody UserRoleUpdateDto userRoleUpdateDto) {
+        authService.changeRole(userRoleUpdateDto);
+
+        return ResponseEntity.noContent().build();
     }
 
     private void addRefreshTokenCookie(HttpServletResponse response, String username) {

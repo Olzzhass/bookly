@@ -8,4 +8,5 @@ public interface AuthUserService {
     Optional<AuthUser> findByUsername(String username);
     AuthUser save(String username, String email, String password);
     boolean isUserExists(String username);
+    AuthUser save(AuthUser user);
 }

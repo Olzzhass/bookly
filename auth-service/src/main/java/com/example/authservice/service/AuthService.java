@@ -1,5 +1,6 @@
 package com.example.authservice.service;
 
+import com.example.authservice.model.dto.UserRoleUpdateDto;
 import com.example.authservice.model.request.LoginRequest;
 import com.example.authservice.model.request.RegistrationRequest;
 import com.example.authservice.model.response.AuthResponse;
@@ -12,4 +13,6 @@ public interface AuthService {
     AuthResponse registration(RegistrationRequest request);
 
     ResponseCookie createRefreshTokenCookie(String refreshToken);
+
+    void changeRole(UserRoleUpdateDto userRoleUpdateDto);
 }
