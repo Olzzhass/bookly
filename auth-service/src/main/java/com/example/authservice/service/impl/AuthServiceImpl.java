@@ -8,6 +8,7 @@ import com.example.authservice.model.dto.UserRoleUpdateDto;
 import com.example.authservice.model.request.LoginRequest;
 import com.example.authservice.model.request.RegistrationRequest;
 import com.example.authservice.model.response.AuthResponse;
+import com.example.authservice.model.type.Role;
 import com.example.authservice.service.AuthService;
 import com.example.authservice.service.AuthUserService;
 import com.example.authservice.service.PasswordService;
@@ -94,6 +95,10 @@ public class AuthServiceImpl implements AuthService {
         AuthUser user = findUserByUsername(userRoleUpdateDto.getUsername());
 
         user.setRole(userRoleUpdateDto.getRole());
+
+        if (userRoleUpdateDto.getRole() == Role.AUTHOR) {
+            // logic of kafka stream
+        }
 
         authUserService.save(user);
     }
