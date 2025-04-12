@@ -1,9 +1,12 @@
 package com.example.authservice.controller;
 
+import com.example.authservice.model.dto.AuthorRequestDto;
 import com.example.authservice.model.dto.UserRoleUpdateDto;
 import com.example.authservice.model.request.LoginRequest;
 import com.example.authservice.model.request.RegistrationRequest;
 import com.example.authservice.model.response.AuthResponse;
+import com.example.authservice.service.AuthService;
+import com.example.authservice.service.AuthorRequestService;
 import com.example.authservice.service.RefreshTokenService;
 import com.example.authservice.service.impl.AuthServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,12 +18,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthServiceImpl authService;
+    // TODO Разделить логику на несколько контроллеров -> AuthorRequestController, mayBe TokenController
+
+    private final AuthService authService;
+    private final AuthorRequestService authorRequestService;
     private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/login")
@@ -71,8 +79,15 @@ public class AuthController {
         return ResponseEntity.ok("Successful test of method security");
     }
 
+    @PostMapping("/author-request")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<String> requestAuthorRole(@RequestBody AuthorRequestDto requestDto, Principal principal) {
+        authorRequestService.submitRequest(requestDto, principal.getName());
+        return ResponseEntity.ok("Request submitted for review.");
+    }
+
     @PutMapping("/change-role")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR')")
     public ResponseEntity<Void> changeRole(@RequestBody UserRoleUpdateDto userRoleUpdateDto) {
         authService.changeRole(userRoleUpdateDto);
 

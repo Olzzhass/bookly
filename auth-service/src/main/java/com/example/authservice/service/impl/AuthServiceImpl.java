@@ -3,16 +3,16 @@ package com.example.authservice.service.impl;
 import com.example.authservice.exception.UserAlreadyExistException;
 import com.example.authservice.exception.UserNotFoundException;
 import com.example.authservice.model.AuthUser;
+import com.example.authservice.model.AuthorRequest;
 import com.example.authservice.model.RefreshToken;
+import com.example.authservice.model.type.RequestStatus;
+import com.example.shared.dto.KafkaAuthorCreatedEvent;
 import com.example.authservice.model.dto.UserRoleUpdateDto;
 import com.example.authservice.model.request.LoginRequest;
 import com.example.authservice.model.request.RegistrationRequest;
 import com.example.authservice.model.response.AuthResponse;
 import com.example.authservice.model.type.Role;
-import com.example.authservice.service.AuthService;
-import com.example.authservice.service.AuthUserService;
-import com.example.authservice.service.PasswordService;
-import com.example.authservice.service.RefreshTokenService;
+import com.example.authservice.service.*;
 import com.example.authservice.util.JwtIssuer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
@@ -35,6 +35,8 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final PasswordService passwordService;
     private final RefreshTokenService refreshTokenService;
+    private final KafkaProducerService kafkaProducerService;
+    private final AuthorRequestService authorRequestService;
 
     @Override
     public AuthResponse login(LoginRequest request) {
@@ -94,10 +96,19 @@ public class AuthServiceImpl implements AuthService {
     public void changeRole(UserRoleUpdateDto userRoleUpdateDto) {
         AuthUser user = findUserByUsername(userRoleUpdateDto.getUsername());
 
+        AuthorRequest authorRequest = authorRequestService.findByUsername(userRoleUpdateDto.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("Request not found"));
+
         user.setRole(userRoleUpdateDto.getRole());
 
         if (userRoleUpdateDto.getRole() == Role.AUTHOR) {
-            // logic of kafka stream
+            kafkaProducerService.sendAuthorCreatedEvent(
+                    new KafkaAuthorCreatedEvent(
+                            authorRequest.getUsername(),
+                            authorRequest.getFirstName(),
+                            authorRequest.getLastName(),
+                            authorRequest.getBio())
+            );
         }
 
         authUserService.save(user);
