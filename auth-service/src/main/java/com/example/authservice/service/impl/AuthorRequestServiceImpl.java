@@ -37,4 +37,9 @@ public class AuthorRequestServiceImpl implements AuthorRequestService {
     public Optional<AuthorRequest> findByUsername(String username) {
         return authorRequestRepository.findByUsername(username);
     }
+
+    @Override
+    public AuthorRequest save(AuthorRequest authorRequest) {
+        return authorRequestRepository.save(authorRequest);
+    }
 }

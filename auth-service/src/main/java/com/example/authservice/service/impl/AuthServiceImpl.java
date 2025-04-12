@@ -99,9 +99,11 @@ public class AuthServiceImpl implements AuthService {
         AuthorRequest authorRequest = authorRequestService.findByUsername(userRoleUpdateDto.getUsername())
                 .orElseThrow(() -> new UserNotFoundException("Request not found"));
 
-        user.setRole(userRoleUpdateDto.getRole());
-
         if (userRoleUpdateDto.getRole() == Role.AUTHOR) {
+            if (authorRequest.getStatus() != RequestStatus.PENDING) {
+                throw new IllegalStateException("Author request is not in PENDING status");
+            }
+
             kafkaProducerService.sendAuthorCreatedEvent(
                     new KafkaAuthorCreatedEvent(
                             authorRequest.getUsername(),
@@ -109,7 +111,12 @@ public class AuthServiceImpl implements AuthService {
                             authorRequest.getLastName(),
                             authorRequest.getBio())
             );
+
+            authorRequest.setStatus(RequestStatus.APPROVED);
+            authorRequestService.save(authorRequest);
         }
+
+        user.setRole(userRoleUpdateDto.getRole());
 
         authUserService.save(user);
     }

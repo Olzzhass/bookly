@@ -9,4 +9,6 @@ public interface AuthorRequestService {
     void submitRequest(AuthorRequestDto requestDto, String name);
 
     Optional<AuthorRequest> findByUsername(String username);
+
+    AuthorRequest save(AuthorRequest authorRequest);
 }
