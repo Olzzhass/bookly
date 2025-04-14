@@ -10,5 +10,11 @@ public interface AuthorRequestService {
 
     Optional<AuthorRequest> findByUsername(String username);
 
+    AuthorRequest findById(Long requestId);
+
     AuthorRequest save(AuthorRequest authorRequest);
+
+    void approveRequest(Long id);
+
+    void rejectRequest(Long id);
 }

@@ -1,14 +1,17 @@
 package com.example.bookservice.service.impl;
 
+import com.example.bookservice.exception.AuthorNotFoundException;
 import com.example.bookservice.mapper.BookMapper;
 import com.example.bookservice.model.Author;
 import com.example.bookservice.model.Book;
 import com.example.bookservice.model.dto.BookDto;
 import com.example.bookservice.repository.AuthorRepository;
 import com.example.bookservice.repository.BookRepository;
+import com.example.bookservice.service.AuthorService;
 import com.example.bookservice.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,18 +24,22 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final AuthorService authorService;
     private final BookMapper bookMapper;
 
     @Override
+    @Transactional
     public BookDto save(BookDto dto, String username) {
-        // TODO refactoring this code after main logic is completed
         Book book = bookMapper.toEntity(dto);
-        Optional<Author> author = authorRepository.findByUsername(username);
-        book.setAuthors(Collections.singletonList(author.get()));
+
+        Author author = getAuthorByUsername(username);
+        book.setAuthors(Collections.singletonList(author));
+
         return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         bookRepository.deleteById(id);
     }
@@ -46,5 +53,10 @@ public class BookServiceImpl implements BookService {
     public boolean isOwner(Long bookId, String username) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
         return book.getAuthors().stream().anyMatch(author -> author.getUsername().equals(username));
+    }
+
+    @Override
+    public Author getAuthorByUsername(String username) {
+        return authorService.getByUsername(username).orElseThrow(() -> new AuthorNotFoundException("Author not found"));
     }
 }

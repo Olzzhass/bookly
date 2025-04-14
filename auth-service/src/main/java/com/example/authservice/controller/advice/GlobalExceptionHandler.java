@@ -35,9 +35,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<AppExceptionResponse> handleRefreshTokenException(RefreshTokenException exception) {
         return buildExceptionResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
+
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<AppExceptionResponse> handleUserNotFoundException(UserNotFoundException exception) {
+        return buildExceptionResponse(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+
+    @ExceptionHandler(DuplicateAuthorRequestException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<AppExceptionResponse> handleDuplicateAuthorRequestException(DuplicateAuthorRequestException exception) {
+        return buildExceptionResponse(HttpStatus.CONFLICT, exception.getMessage());
+    }
+
+    @ExceptionHandler(AuthorRequestNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<AppExceptionResponse> handleDuplicateAuthorRequestException(AuthorRequestNotFoundException exception) {
         return buildExceptionResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 

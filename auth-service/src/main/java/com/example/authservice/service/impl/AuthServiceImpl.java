@@ -20,7 +20,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +35,6 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordService passwordService;
     private final RefreshTokenService refreshTokenService;
     private final KafkaProducerService kafkaProducerService;
-    private final AuthorRequestService authorRequestService;
 
     @Override
     public AuthResponse login(LoginRequest request) {
@@ -93,31 +91,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void changeRole(UserRoleUpdateDto userRoleUpdateDto) {
-        AuthUser user = findUserByUsername(userRoleUpdateDto.getUsername());
+    public void changeRoleToAdmin(AuthorRequest authorRequest) {
+        AuthUser user = findUserByUsername(authorRequest.getUsername());
 
-        AuthorRequest authorRequest = authorRequestService.findByUsername(userRoleUpdateDto.getUsername())
-                .orElseThrow(() -> new UserNotFoundException("Request not found"));
+        kafkaProducerService.sendAuthorCreatedEvent(
+                new KafkaAuthorCreatedEvent(
+                        authorRequest.getUsername(),
+                        authorRequest.getFirstName(),
+                        authorRequest.getLastName(),
+                        authorRequest.getBio())
+        );
 
-        if (userRoleUpdateDto.getRole() == Role.AUTHOR) {
-            if (authorRequest.getStatus() != RequestStatus.PENDING) {
-                throw new IllegalStateException("Author request is not in PENDING status");
-            }
-
-            kafkaProducerService.sendAuthorCreatedEvent(
-                    new KafkaAuthorCreatedEvent(
-                            authorRequest.getUsername(),
-                            authorRequest.getFirstName(),
-                            authorRequest.getLastName(),
-                            authorRequest.getBio())
-            );
-
-            authorRequest.setStatus(RequestStatus.APPROVED);
-            authorRequestService.save(authorRequest);
-        }
-
-        user.setRole(userRoleUpdateDto.getRole());
-
+        user.setRole(Role.AUTHOR);
         authUserService.save(user);
     }
 
