@@ -5,7 +5,6 @@ import com.example.authservice.model.request.LoginRequest;
 import com.example.authservice.model.request.RegistrationRequest;
 import com.example.authservice.model.response.AuthResponse;
 import com.example.authservice.service.AuthService;
-import com.example.authservice.service.AuthorRequestService;
 import com.example.authservice.service.RefreshTokenService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

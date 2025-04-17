@@ -1,62 +1,38 @@
 package com.example.bookservice.service.impl;
 
-import com.example.bookservice.exception.AuthorNotFoundException;
 import com.example.bookservice.mapper.BookMapper;
-import com.example.bookservice.model.Author;
 import com.example.bookservice.model.Book;
 import com.example.bookservice.model.dto.BookDto;
-import com.example.bookservice.repository.AuthorRepository;
 import com.example.bookservice.repository.BookRepository;
-import com.example.bookservice.service.AuthorService;
 import com.example.bookservice.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-    private final AuthorRepository authorRepository;
-    private final AuthorService authorService;
     private final BookMapper bookMapper;
 
     @Override
-    @Transactional
-    public BookDto save(BookDto dto, String username) {
-        Book book = bookMapper.toEntity(dto);
-
-        Author author = getAuthorByUsername(username);
-        book.setAuthors(Collections.singletonList(author));
-
-        return bookMapper.toDto(bookRepository.save(book));
+    public List<BookDto> getAllBooks() {
+        List<Book> books = bookRepository.findAll();
+        return books.stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 
     @Override
-    @Transactional
-    public void delete(Long id) {
-        bookRepository.deleteById(id);
-    }
-
-    @Override
-    public List<BookDto> findAll() {
-        return bookRepository.findAll().stream().map(bookMapper::toDto).collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean isOwner(Long bookId, String username) {
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
-        return book.getAuthors().stream().anyMatch(author -> author.getUsername().equals(username));
-    }
-
-    @Override
-    public Author getAuthorByUsername(String username) {
-        return authorService.getByUsername(username).orElseThrow(() -> new AuthorNotFoundException("Author not found"));
+    public BookDto createBook(BookDto bookDto) {
+        Book book = bookMapper.toEntity(bookDto);
+        book.setCreatedAt(LocalDateTime.now());
+        book.setUpdatedAt(LocalDateTime.now());
+        Book saved = bookRepository.save(book);
+        return bookMapper.toDto(saved);
     }
 }

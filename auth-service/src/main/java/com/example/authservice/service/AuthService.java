@@ -1,6 +1,5 @@
 package com.example.authservice.service;
 
-import com.example.authservice.model.AuthorRequest;
 import com.example.authservice.model.dto.UserRoleUpdateDto;
 import com.example.authservice.model.request.LoginRequest;
 import com.example.authservice.model.request.RegistrationRequest;
@@ -15,5 +14,4 @@ public interface AuthService {
 
     ResponseCookie createRefreshTokenCookie(String refreshToken);
 
-    void changeRoleToAdmin(AuthorRequest authorRequest);
 }

@@ -1,6 +1,6 @@
 package com.example.bookservice.model.dto;
 
-import com.example.bookservice.model.Author;
+import com.example.bookservice.model.AuthorEmbedded;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +17,7 @@ public class BookDto {
     private String language;
     private float averageRating;
     private int reviewCount;
-    private List<Author> authors;
+    private List<AuthorEmbedded> authors;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

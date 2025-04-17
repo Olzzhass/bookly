@@ -3,11 +3,8 @@ package com.example.authservice.service.impl;
 import com.example.authservice.exception.UserAlreadyExistException;
 import com.example.authservice.exception.UserNotFoundException;
 import com.example.authservice.model.AuthUser;
-import com.example.authservice.model.AuthorRequest;
 import com.example.authservice.model.RefreshToken;
-import com.example.authservice.model.type.RequestStatus;
 import com.example.shared.dto.KafkaAuthorCreatedEvent;
-import com.example.authservice.model.dto.UserRoleUpdateDto;
 import com.example.authservice.model.request.LoginRequest;
 import com.example.authservice.model.request.RegistrationRequest;
 import com.example.authservice.model.response.AuthResponse;
@@ -34,7 +31,6 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final PasswordService passwordService;
     private final RefreshTokenService refreshTokenService;
-    private final KafkaProducerService kafkaProducerService;
 
     @Override
     public AuthResponse login(LoginRequest request) {
@@ -88,22 +84,6 @@ public class AuthServiceImpl implements AuthService {
                 .maxAge(Duration.ofDays(1))
                 .sameSite("Strict")
                 .build();
-    }
-
-    @Override
-    public void changeRoleToAdmin(AuthorRequest authorRequest) {
-        AuthUser user = findUserByUsername(authorRequest.getUsername());
-
-        kafkaProducerService.sendAuthorCreatedEvent(
-                new KafkaAuthorCreatedEvent(
-                        authorRequest.getUsername(),
-                        authorRequest.getFirstName(),
-                        authorRequest.getLastName(),
-                        authorRequest.getBio())
-        );
-
-        user.setRole(Role.AUTHOR);
-        authUserService.save(user);
     }
 
     private AuthUser findUserByUsername(String username) {

@@ -48,13 +48,6 @@ public class GlobalExceptionHandler {
         return buildExceptionResponse(HttpStatus.CONFLICT, exception.getMessage());
     }
 
-    @ExceptionHandler(AuthorRequestNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<AppExceptionResponse> handleDuplicateAuthorRequestException(AuthorRequestNotFoundException exception) {
-        return buildExceptionResponse(HttpStatus.NOT_FOUND, exception.getMessage());
-    }
-
-
 
     // Confusing of error types when developing
 

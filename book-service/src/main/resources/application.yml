@@ -6,9 +6,6 @@ spring:
     url: jdbc:postgresql://localhost:5435/book-service-db
     username: "${POSTGRES_DB_USERNAME}"
     password: "${POSTGRES_DB_PASSWORD}"
-  liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.yaml
   jpa:
     hibernate:
       ddl-auto: none
@@ -25,6 +22,9 @@ spring:
       properties:
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
         spring.json.trusted.packages: com.example.shared.dto
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/book-db
 
 server:
   port: 8083

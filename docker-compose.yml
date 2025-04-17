@@ -56,6 +56,20 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
+  mongodb:
+    image: mongo:6.0
+    container_name: book-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: book-db
+    command: ["--replSet", "rs0"]
+    volumes:
+      - mongo-data:/data/db
+
 networks:
   bookly-network:
     driver: bridge
+
+volumes:
+  mongo-data:
