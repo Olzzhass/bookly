@@ -1,5 +1,6 @@
 package com.example.bookservice.service.impl;
 
+import com.example.bookservice.exception.BookSuggestionNotFoundException;
 import com.example.bookservice.mapper.BookMapper;
 import com.example.bookservice.mapper.BookSuggestionMapper;
 import com.example.bookservice.model.Book;
@@ -44,7 +45,7 @@ public class BookSuggestionServiceImpl implements BookSuggestionService {
     @Transactional
     public BookSuggestionDto approveSuggestion(String id) {
         BookSuggestion suggestion = bookSuggestionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Suggestion not found")); // TODO exception handling
+                .orElseThrow(() -> new BookSuggestionNotFoundException("Suggestion not found"));
 
         suggestion.setStatus(BookSuggestionStatus.APPROVED);
         bookSuggestionRepository.save(suggestion);
@@ -62,7 +63,7 @@ public class BookSuggestionServiceImpl implements BookSuggestionService {
     @Transactional
     public BookSuggestionDto rejectSuggestion(String id, String moderatorMessage) {
         BookSuggestion suggestion = bookSuggestionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Suggestion not found")); // TODO exception handling
+                .orElseThrow(() -> new BookSuggestionNotFoundException("Suggestion not found"));
 
         suggestion.setStatus(BookSuggestionStatus.REJECTED);
         suggestion.setModeratorMessage(moderatorMessage);
