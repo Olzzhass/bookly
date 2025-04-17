@@ -63,7 +63,6 @@ services:
       - "27017:27017"
     environment:
       MONGO_INITDB_DATABASE: book-db
-    command: ["--replSet", "rs0"]
     volumes:
       - mongo-data:/data/db
 

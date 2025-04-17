@@ -4,7 +4,6 @@ import com.example.authservice.exception.UserAlreadyExistException;
 import com.example.authservice.exception.UserNotFoundException;
 import com.example.authservice.model.AuthUser;
 import com.example.authservice.model.RefreshToken;
-import com.example.shared.dto.KafkaAuthorCreatedEvent;
 import com.example.authservice.model.request.LoginRequest;
 import com.example.authservice.model.request.RegistrationRequest;
 import com.example.authservice.model.response.AuthResponse;
