@@ -1,6 +1,17 @@
 spring:
   application:
     name: search-service
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: search-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: com.example.shared.dto
+  elasticsearch:
+    uris: http://localhost:9200
 server:
   port: 8084
 security:

@@ -9,10 +9,15 @@ import com.example.bookservice.model.dto.BookSuggestionDto;
 import com.example.bookservice.model.type.BookSuggestionStatus;
 import com.example.bookservice.repository.BookRepository;
 import com.example.bookservice.repository.BookSuggestionRepository;
+import com.example.bookservice.service.BookKafkaProducerService;
 import com.example.bookservice.service.BookSuggestionService;
+import com.example.shared.dto.AuthorEmbedded;
+import com.example.shared.dto.BookCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +30,7 @@ public class BookSuggestionServiceImpl implements BookSuggestionService {
     private final BookSuggestionMapper bookSuggestionMapper;
     private final BookMapper bookMapper;
     private final BookRepository bookRepository;
+    private final BookKafkaProducerService bookKafkaProducerService;
 
     @Override
     public List<BookSuggestionDto> getAll() {
@@ -55,6 +61,25 @@ public class BookSuggestionServiceImpl implements BookSuggestionService {
         book.setUpdatedAt(LocalDateTime.now());
 
         bookRepository.save(book);
+
+        // TODO better architecture
+        BookCreatedEvent event = BookCreatedEvent.builder()
+                .id(book.getId())
+                .name(book.getName())
+                .description(book.getDescription())
+                .isbn(book.getIsbn())
+                .publishedDate(book.getPublishedDate())
+                .language(book.getLanguage())
+                .authors(book.getAuthors().stream()
+                        .map(author -> AuthorEmbedded.builder()
+                                .firstName(author.getFirstName())
+                                .lastName(author.getLastName())
+                                .bio(author.getBio())
+                                .build())
+                        .toList())
+                .build();
+
+        bookKafkaProducerService.sendBookCreatedEvent(event);
 
         return bookSuggestionMapper.toDto(suggestion);
     }
