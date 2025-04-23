@@ -20,6 +20,7 @@
         <module>auth-service</module>
         <module>user-service</module>
         <module>shared</module>
+        <module>search-service</module>
     </modules>
 
     <properties>
