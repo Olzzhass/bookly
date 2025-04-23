@@ -3,3 +3,6 @@ spring:
     name: search-service
 server:
   port: 8084
+security:
+  jwt:
+    secret-key: verysecretkeyohmygodwhyisitsosecretdonttellanybody
