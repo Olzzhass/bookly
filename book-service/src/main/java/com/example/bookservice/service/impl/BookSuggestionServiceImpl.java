@@ -68,7 +68,7 @@ public class BookSuggestionServiceImpl implements BookSuggestionService {
                 .name(book.getName())
                 .description(book.getDescription())
                 .isbn(book.getIsbn())
-                .publishedDate(book.getPublishedDate())
+                .publishedYear(book.getPublishedYear())
                 .language(book.getLanguage())
                 .authors(book.getAuthors().stream()
                         .map(author -> AuthorEmbedded.builder()

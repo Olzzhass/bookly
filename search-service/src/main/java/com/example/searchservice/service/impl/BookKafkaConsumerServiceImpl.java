@@ -22,7 +22,7 @@ public class BookKafkaConsumerServiceImpl implements BookKafkaConsumerService {
                 .name(event.getName())
                 .description(event.getDescription())
                 .isbn(event.getIsbn())
-                .publishedDate(event.getPublishedDate())
+                .publishedYear(event.getPublishedYear())
                 .language(event.getLanguage())
                 .authors(event.getAuthors())
                 .build();

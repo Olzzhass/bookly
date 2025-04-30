@@ -2,6 +2,7 @@ package com.example.shared.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class BookCreatedEvent {
     private String name;
     private String description;
     private String isbn;
-    private LocalDateTime publishedDate;
+    private Integer publishedYear;
     private String language;
     private List<AuthorEmbedded> authors;
 }

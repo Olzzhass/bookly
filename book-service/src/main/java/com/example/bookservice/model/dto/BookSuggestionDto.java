@@ -15,7 +15,7 @@ public class BookSuggestionDto {
     private String name;
     private String description;
     private String isbn;
-    private LocalDateTime publishedDate;
+    private Integer publishedYear;
     private String language;
     private float averageRating;
     private int reviewCount;
